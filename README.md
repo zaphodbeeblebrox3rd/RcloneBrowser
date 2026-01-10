@@ -87,7 +87,7 @@ Mac version is compiled to run on all versions of macOS starting with 10.9.
 Situation with Linux is a bit fuzzier...
 Linux binary ([AppImage](https://appimage.org/)) for armhf architecture runs on any Raspberry Pi hardware using Raspbian based on Stretch or Buster.
 
-Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on CentOS 7 (released in 2014) and i386 on Ubuntu 16.04 LTS (released in 2016).
+Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on a modern Linux distribution and i386 on Ubuntu 16.04 LTS (released in 2016).
 
 The whole idea with AppImage is to build it on the oldest still supported LTS distro – and it should work on all newer OS releases. AppImage contains an aplication and all the files the app needs to run. In other words, each AppImage has no dependencies other than what is included in the base operating system.
 
@@ -146,11 +146,26 @@ If for whatever reason you are not happy or your system is not covered with prov
 Build instructions
 ------------------
 
+**System Requirements:** This project requires C++14 support (GCC 5.1+ or equivalent) and Qt5. The following table shows supported and unsupported major versions for each distribution:
+
+| Distribution | Unsupported Versions | Supported Versions |
+|--------------|---------------------|-------------------|
+| **Debian/Ubuntu** | Ubuntu 14.04 and earlier, Debian 8 (Jessie) and earlier | Ubuntu 16.04+, Debian 9 (Stretch)+ |
+| **Suse/OpenSuse** | OpenSUSE 13.2 and earlier | OpenSUSE Leap 42.1+, Tumbleweed |
+| **RHEL** | RHEL 7 and earlier | RHEL 8+ |
+| **Fedora** | Fedora 21 and earlier | Fedora 22+ |
+| **Arch/Manjaro** | N/A (rolling release) | All current versions |
+| **FreeBSD** | FreeBSD 10 and earlier | FreeBSD 11+ |
+| **OpenBSD** | OpenBSD 5.8 and earlier | OpenBSD 6.0+ |
+| **NetBSD** | NetBSD 7 and earlier | NetBSD 8+ |
+| **macOS** | macOS 10.8 and earlier | macOS 10.9+ |
+| **Windows** | Windows 7 and earlier (without Visual Studio 2015+) | Windows 8+ with Visual Studio 2015+ or Windows 10+ |
+
 ### Linux
 1.  Install dependencies for your particular distribution:
     *   **Debian/Ubuntu and derivatives**: `sudo apt update && sudo apt -y install git g++ cmake make qtdeclarative5-dev` 
     *   **Suse/OpenSuse**: `sudo zypper ref && sudo zypper --non-interactive install git cmake make gcc-c++ libQt5Core-devel libQt5Widgets-devel libQt5Network-devel`
-    *   **RHEL/CentOS**: `sudo yum -y install git gcc-c++ cmake make qt5-qtdeclarative`
+    *   **RHEL**: `sudo yum -y install git gcc-c++ cmake make qt5-qtdeclarative`
     *   **Fedora**: `sudo dnf -y install git g++ cmake make qt5-qtdeclarative-devel`
     *   **Arch/Manjaro**: `sudo pacman -Sy --noconfirm --needed git gcc cmake make qt5-declarative`
 2.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`

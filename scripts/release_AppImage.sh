@@ -2,14 +2,8 @@
 
 set -e
 
-# x86_64 build on CentOS 7.7
-  # gcc 7 installed
-  # sudo yum install -y centos-release-scl
-  # sudo yum install -y devtoolset-7-gcc*
-  # run below command before build
-  # scl enable devtoolset-7 bash
-
-  # newer cmake is required than one included in CentOS 7
+# x86_64 build
+  # newer cmake may be required depending on distribution
   # download from http://www.cmake.org/download
   # sudo mkdir /opt/cmake
   # sudo sh cmake-$version.$build-Linux-x86_64.sh --prefix=/opt/cmake
@@ -39,13 +33,11 @@ if [ "$1" = "SIGN" ]; then
   export SIGN="1"
 fi
 
-# check gcc version on Centos
+# check gcc version
 if [ $(arch) = "x86_64" ]; then
   currentver="$(gcc -dumpversion)"
   if [ "${currentver:0:1}" -lt "7"  ]; then
     echo "gcc version 7 or newer required"
-    echo "on Cetos 7 run"
-    echo "scl enable devtoolset-7 bash"
     exit
  fi
 fi

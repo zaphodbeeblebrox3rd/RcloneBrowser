@@ -430,7 +430,7 @@ void MainWindow::rcloneGetVersion() {
           };
 #endif
 
-          QStringList lines = version.split("\n", QString::SkipEmptyParts);
+          QStringList lines = version.split("\n", Qt::SkipEmptyParts);
           QString rclone_info2;
           QString rclone_info3;
 
@@ -810,6 +810,7 @@ void MainWindow::rcloneListRemotes() {
             }
 #else
              // for Linux/BSD PM_ListViewIconSize stays the same
+             Q_UNUSED(darkModeIconScale);
              size = lightModeiconScale * style->pixelMetric(QStyle::PM_ListViewIconSize);
 #endif
 #else
@@ -1168,7 +1169,7 @@ void MainWindow::addStream(const QString &remote, const QString &stream) {
   ui.jobs->insertWidget(1, line);
   ui.tabs->setTabText(1, QString("Jobs (%1)").arg(++mJobCount));
 
-  player->start(stream, QProcess::ReadOnly);
+  player->start(stream, QStringList(), QProcess::ReadOnly);
   UseRclonePassword(rclone);
   rclone->start(GetRclone(),
                 QStringList() << "cat" << GetRcloneConf() << remote,
