@@ -87,11 +87,11 @@ Mac version is compiled to run on all versions of macOS starting with 10.9.
 Situation with Linux is a bit fuzzier...
 Linux binary ([AppImage](https://appimage.org/)) for armhf architecture runs on any Raspberry Pi hardware using Raspbian based on Stretch or Buster.
 
-Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on a modern Linux distribution and i386 on Ubuntu 16.04 LTS (released in 2016).
+Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on CentOS 7 (glibc 2.17) and i386 on Ubuntu 16.04 LTS (released in 2016, glibc 2.23). Building on CentOS 7 ensures the AppImage is compatible with systems running glibc 2.17 and newer (CentOS 7+, Ubuntu 16.04+, Debian Stretch+, etc.).
 
 The whole idea with AppImage is to build it on the oldest still supported LTS distro – and it should work on all newer OS releases. AppImage contains an aplication and all the files the app needs to run. In other words, each AppImage has no dependencies other than what is included in the base operating system.
 
-In practical terms it means that for example for Ubuntu Rclone Browser AppImage works on all versions starting with 16.04 LTS and for Debian starting with Stretch. With other distributions YMMV but I test major ones like Suse or Fedora. This is Linux. 10000 different distributions… with changes and customizations often only their authors are aware of. I would be happy to hear what distribution it does not work for.
+In practical terms it means that for example for Ubuntu Rclone Browser AppImage works on all versions starting with 16.04 LTS (glibc 2.23+) and for Debian starting with Stretch (glibc 2.24+). The AppImage also works on CentOS 7+ (glibc 2.17+). With other distributions YMMV but I test major ones like Suse or Fedora. This is Linux. 10000 different distributions… with changes and customizations often only their authors are aware of. I would be happy to hear what distribution it does not work for.
 
 To make life easier when using AppImages on Linux, you can use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) which monitors your system for downloaded AppImages and provides several useful benefits including:
 
@@ -146,7 +146,11 @@ If for whatever reason you are not happy or your system is not covered with prov
 Build instructions
 ------------------
 
-**System Requirements:** This project requires C++14 support (GCC 5.1+ or equivalent) and Qt5. The following table shows supported and unsupported major versions for each distribution:
+**System Requirements:** This project requires C++14 support (GCC 5.1+ or equivalent) and Qt5. The source code can be built on Ubuntu 18.04 LTS through 25.10 and equivalent distributions. The following table shows supported and unsupported major versions for each distribution:
+
+**Note for AppImage Builds:** While the source code builds on Ubuntu 18.04-25.10, AppImages should be built on **CentOS 7** (glibc 2.17) to ensure compatibility with systems running glibc 2.17 and newer. Building AppImages on newer systems will limit compatibility to systems with matching or newer glibc versions.
+
+**Building AppImages on Newer Systems:** If you're building on Ubuntu 18.04+ but want to maintain compatibility with CentOS 7+ and Ubuntu 16.04+, you can use Docker to build in a CentOS 7 environment. See the [Developer Guide](DEVELOPER_README.md#building-appimage-with-docker) for instructions.
 
 | Distribution | Unsupported Versions | Supported Versions |
 |--------------|---------------------|-------------------|
@@ -174,6 +178,8 @@ Build instructions
 5.  Run `cmake ..` from build folder to create makefile
 6.  Run `make` from build folder to create binary
 7.  Install `sudo make install`
+
+**For Docker-based AppImage builds:** See the [Developer Guide](DEVELOPER_README.md#building-appimage-with-docker) for instructions on building AppImages using Docker for maximum compatibility.
 
 ### FreeBSD
 1.  Install dependencies `sudo pkg install git cmake qt5-buildtools qt5-declarative qt5-qmake`

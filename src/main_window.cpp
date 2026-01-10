@@ -430,7 +430,7 @@ void MainWindow::rcloneGetVersion() {
           };
 #endif
 
-          QStringList lines = version.split("\n", Qt::SkipEmptyParts);
+          QStringList lines = version.split("\n", QString::SkipEmptyParts);
           QString rclone_info2;
           QString rclone_info3;
 
