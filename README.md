@@ -271,6 +271,11 @@ I used DinCahill's [fork](https://github.com/DinCahill/RcloneBrowser) as a base 
 
 I fixed whatever I found not working and added various tweaks enhancing functionality. I recompiled and repackaged everything using latest Qt (5.13.1) and latest platforms' compilers. This on its own fixed some issues and added new features like support for dark mode in macOS. Then followed with more fixes and more features. Rclone Browser was great again:) and is getting better.
 
+Acknowledgments
+---------------
+
+This project uses various external tools and libraries during development and packaging. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for a complete list and recognition of their creators and maintainers.
+
 
 [1]: https://travis-ci.org/zaphodbeeblebrox3rd/RcloneBrowser
 [2]: https://ci.appveyor.com/project/zaphodbeeblebrox3rd/RcloneBrowser
