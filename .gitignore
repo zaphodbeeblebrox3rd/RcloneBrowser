@@ -10,3 +10,5 @@ debian/rclone-browser*
 /release
 /bs0.cmd
 /src/*.autosave
+*.appimage
+Dockerfile.appimage

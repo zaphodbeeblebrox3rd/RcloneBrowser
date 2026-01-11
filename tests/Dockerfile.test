@@ -1,0 +1,79 @@
+# Dockerfile for testing AppImage on CentOS 7 with GUI support
+# This allows testing the AppImage in a CentOS 7 environment with desktop GUI
+
+FROM centos:7
+
+# CentOS 7 reached end-of-life, so we need to use vault.centos.org
+# Update yum configuration to use vault repository
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo
+
+# Install EPEL repository
+RUN yum install -y epel-release && yum clean all
+
+# Install desktop environment (Xfce - lightweight and suitable for testing)
+# Install VNC server for remote GUI access
+# Install FUSE (required for AppImage execution)
+# Install X11 utilities for X11 forwarding
+# Install wget, curl, and unzip for downloading and extracting rclone
+RUN yum install -y \
+    xfce4 \
+    xfce4-terminal \
+    tigervnc-server \
+    fuse \
+    xorg-x11-xauth \
+    xorg-x11-utils \
+    xorg-x11-server-Xvfb \
+    which \
+    wget \
+    curl \
+    unzip \
+    && yum clean all
+
+# Install rclone (download binary directly since CentOS 7 repos don't have it)
+# Using a recent stable version that works on CentOS 7 (glibc 2.17)
+RUN RCLONE_VERSION="1.66.0" && \
+    wget -q "https://github.com/rclone/rclone/releases/download/v${RCLONE_VERSION}/rclone-v${RCLONE_VERSION}-linux-amd64.zip" -O /tmp/rclone.zip && \
+    unzip -q /tmp/rclone.zip -d /tmp && \
+    cp /tmp/rclone-v${RCLONE_VERSION}-linux-amd64/rclone /usr/local/bin/ && \
+    chmod +x /usr/local/bin/rclone && \
+    rm -rf /tmp/rclone.zip /tmp/rclone-v${RCLONE_VERSION}-linux-amd64 && \
+    rclone version
+
+# Set up VNC server
+# Create VNC user directory and set password (default: password)
+# You can change the password by mounting a custom .vnc/passwd file
+RUN mkdir -p /root/.vnc && \
+    echo "password" | vncpasswd -f > /root/.vnc/passwd && \
+    chmod 600 /root/.vnc/passwd
+
+# Create VNC startup script
+RUN echo '#!/bin/bash' > /root/.vnc/xstartup && \
+    echo 'unset SESSION_MANAGER' >> /root/.vnc/xstartup && \
+    echo 'unset DBUS_SESSION_BUS_ADDRESS' >> /root/.vnc/xstartup && \
+    echo '[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources' >> /root/.vnc/xstartup && \
+    echo 'xsetroot -solid grey' >> /root/.vnc/xstartup && \
+    echo 'vncconfig -iconic &' >> /root/.vnc/xstartup && \
+    echo 'export XKL_XMODMAP_DISABLE=1' >> /root/.vnc/xstartup && \
+    echo 'export XDG_CURRENT_DESKTOP="XFCE"' >> /root/.vnc/xstartup && \
+    echo 'export XDG_MENU_PREFIX="xfce-"' >> /root/.vnc/xstartup && \
+    echo 'export XDG_SESSION_DESKTOP="xfce"' >> /root/.vnc/xstartup && \
+    echo 'startxfce4 &' >> /root/.vnc/xstartup && \
+    chmod +x /root/.vnc/xstartup
+
+# Set up environment for Xfce
+ENV DISPLAY=:1
+ENV VNC_RESOLUTION=1024x768
+
+# Create directory for AppImage
+RUN mkdir -p /test
+
+# Set working directory
+WORKDIR /test
+
+# Expose VNC port
+EXPOSE 5901
+
+# Default command (can be overridden)
+CMD ["/bin/bash"]
+

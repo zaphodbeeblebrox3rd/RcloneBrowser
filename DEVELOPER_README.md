@@ -36,3 +36,32 @@ If the AppImage build fails inside the container:
 - Verify that the build script has execute permissions: `chmod +x scripts/release_AppImage.sh`
 - Review the build output for specific error messages
 
+## Testing AppImage on CentOS 7
+
+After building the AppImage, you can test it on CentOS 7 to verify it works correctly. The `tests/` directory contains a script to run the AppImage in a CentOS 7 container with GUI support.
+
+### Quick Start
+
+1. **Build the AppImage** (if you haven't already):
+   ```bash
+   ./scripts/build_AppImage_docker.sh
+   ```
+
+2. **Run the AppImage in CentOS 7 container with VNC** (recommended):
+   ```bash
+   ./tests/run_test_container.sh --vnc
+   ```
+   Then connect to the VNC server at `localhost:5901` (password: `password`) to see the GUI.
+
+3. **Or use X11 forwarding** (Linux hosts only):
+   ```bash
+   ./tests/run_test_container.sh --x11
+   ```
+   The AppImage GUI will appear in your X server window.
+
+The script spins up a CentOS 7 container, mounts your AppImage, and launches it automatically so you can verify it works correctly.
+
+### Detailed Documentation
+
+For complete instructions, troubleshooting, and optional VM-based testing with Vagrant, see [tests/README.md](tests/README.md).
+

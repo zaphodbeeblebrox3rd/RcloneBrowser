@@ -41,18 +41,26 @@ if [ "$1" = "SIGN" ]; then
 fi
 
 # check gcc version (C++14 requires GCC 5.1+)
-currentver="$(gcc -dumpversion | cut -d. -f1)"
-minorver="$(gcc -dumpversion | cut -d. -f2)"
+# Use the GCC from PATH (which should be devtoolset-7's GCC 7.3 in CentOS 7 Docker)
+GCC_CMD="gcc"
+if [ -f "/opt/rh/devtoolset-7/root/usr/bin/gcc" ]; then
+  GCC_CMD="/opt/rh/devtoolset-7/root/usr/bin/gcc"
+fi
+currentver="$($GCC_CMD -dumpversion | cut -d. -f1)"
+minorver="$($GCC_CMD -dumpversion | cut -d. -f2)"
 if [ "$currentver" -lt "5" ] || ([ "$currentver" -eq "5" ] && [ "$minorver" -lt "1" ]); then
   echo "Error: GCC 5.1 or newer required for C++14 support"
-  echo "Current GCC version: $(gcc -dumpversion)"
+  echo "Current GCC version: $($GCC_CMD -dumpversion)"
+  echo "GCC path: $GCC_CMD"
   exit 1
 fi
+echo "Using GCC $($GCC_CMD -dumpversion) from: $GCC_CMD"
 
 # check glibc version for AppImage compatibility
 # AppImages built on systems with newer glibc won't run on older systems
 # For maximum compatibility, build on CentOS 7 (glibc 2.17)
-if [ $(arch) = "x86_64" ] || [ $(arch) = "i686" ]; then
+# Skip this check if running in Docker (Docker build script handles compatibility)
+if [ -z "$CI" ] && [ ! -f /.dockerenv ] && [ $(arch) = "x86_64" ] || [ $(arch) = "i686" ]; then
   if command -v ldd >/dev/null 2>&1; then
     # Extract glibc version from ldd output (format varies: "ldd (Ubuntu GLIBC 2.35) 2.35" or "ldd (GNU libc) 2.27")
     GLIBC_VERSION=$(ldd --version 2>&1 | head -n1 | grep -oE '[0-9]+\.[0-9]+' | head -n1)
@@ -76,6 +84,12 @@ if [ $(arch) = "x86_64" ] || [ $(arch) = "i686" ]; then
         sleep 5
       fi
     fi
+  fi
+elif [ -f /.dockerenv ]; then
+  # Running in Docker - verify we're on CentOS 7 (glibc 2.17)
+  if command -v ldd >/dev/null 2>&1; then
+    GLIBC_VERSION=$(ldd --version 2>&1 | head -n1 | grep -oE '[0-9]+\.[0-9]+' | head -n1)
+    echo "Building in Docker container with glibc $GLIBC_VERSION (target: glibc 2.17 for CentOS 7 compatibility)"
   fi
 fi
 
@@ -126,6 +140,18 @@ fi
 # build and install to temporary AppDir folder
 cd "$BUILD"
 
+# On CentOS 7 with devtoolset, ensure we link against system libstdc++ (glibc 2.17)
+# not devtoolset's libstdc++ (glibc 2.18). 
+# Set library path and linker flags to prioritize system libs.
+if [ -d "/opt/rh/devtoolset-7" ] && [ -f "/usr/lib64/libstdc++.so.6" ]; then
+  export LD_LIBRARY_PATH="/usr/lib64:/usr/lib:${LD_LIBRARY_PATH}"
+  # Explicitly tell linker to use system libstdc++ instead of devtoolset's
+  export LDFLAGS="-L/usr/lib64 -Wl,-rpath,/usr/lib64 ${LDFLAGS}"
+  export CPPFLAGS="-I/usr/include ${CPPFLAGS}"
+  echo "Using system libstdc++ for glibc 2.17 compatibility (avoiding devtoolset version)"
+  echo "LDFLAGS set to: $LDFLAGS"
+fi
+
 if [ $(arch) = "armv7l" ]; then
   # more threads need swap on 1GB RAM RPi
   cmake .. -DCMAKE_INSTALL_PREFIX=/usr
@@ -159,10 +185,19 @@ cp "$ROOT"/LICENSE "$TEMP_BASE"/"$TARGET"/AppDir/License.txt
 # https://github.com/linuxdeploy/linuxdeploy
 # https://github.com/linuxdeploy/linuxdeploy-plugin-qt
 # Set Qt environment variables to help linuxdeploy-qt find Qt modules
+# Detect Qt installation path (varies by distro)
 if command -v qmake >/dev/null 2>&1; then
-  export QTDIR=$(qmake -query QT_INSTALL_PREFIX 2>/dev/null || echo "/usr/lib/x86_64-linux-gnu/qt5")
+  export QTDIR=$(qmake -query QT_INSTALL_PREFIX 2>/dev/null || echo "/usr/lib64/qt5")
   export PATH="$QTDIR/bin:$PATH"
-  export QT_PLUGIN_PATH="${QT_PLUGIN_PATH:-/usr/lib/x86_64-linux-gnu/qt5/plugins}"
+  # Find Qt plugin path (CentOS uses /usr/lib64/qt5/plugins, Ubuntu uses /usr/lib/x86_64-linux-gnu/qt5/plugins)
+  if [ -d "/usr/lib64/qt5/plugins" ]; then
+    export QT_PLUGIN_PATH="/usr/lib64/qt5/plugins"
+  elif [ -d "/usr/lib/x86_64-linux-gnu/qt5/plugins" ]; then
+    export QT_PLUGIN_PATH="/usr/lib/x86_64-linux-gnu/qt5/plugins"
+  else
+    export QT_PLUGIN_PATH="${QT_PLUGIN_PATH:-/usr/lib64/qt5/plugins}"
+  fi
+  echo "Qt installation: QTDIR=$QTDIR, QT_PLUGIN_PATH=$QT_PLUGIN_PATH"
 fi
 
 # Deploy dependencies first, then Qt plugin
@@ -174,17 +209,129 @@ linuxdeploy --appdir AppDir \
 # Deploy Qt libraries - manually specify the libraries the app needs
 # The app links against Qt5::Widgets and Qt5::Network, which also require Qt5::Core and Qt5::Gui
 echo "Deploying Qt libraries manually..."
-QT_LIB_DIR="/usr/lib/x86_64-linux-gnu"
+# Find Qt library directory (varies by distro: /usr/lib64 for CentOS/RHEL, /usr/lib/x86_64-linux-gnu for Ubuntu/Debian)
+if [ -d "/usr/lib64/qt5" ] && [ -f "/usr/lib64/libQt5Widgets.so.5" ]; then
+  QT_LIB_DIR="/usr/lib64"
+elif [ -d "/usr/lib/x86_64-linux-gnu/qt5" ] && [ -f "/usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5" ]; then
+  QT_LIB_DIR="/usr/lib/x86_64-linux-gnu"
+else
+  # Try to find Qt libraries
+  QT_LIB_DIR=$(find /usr/lib* -name "libQt5Widgets.so.5" 2>/dev/null | head -1 | xargs dirname 2>/dev/null || echo "/usr/lib64")
+fi
+
+echo "Using Qt library directory: $QT_LIB_DIR"
 for lib in libQt5Widgets.so.5 libQt5Network.so.5 libQt5Core.so.5 libQt5Gui.so.5; do
   if [ -f "$QT_LIB_DIR/$lib" ]; then
+    echo "Deploying $lib from $QT_LIB_DIR..."
     # Deploy library (strip failures are non-fatal, libraries are still copied)
     linuxdeploy --appdir AppDir --library "$QT_LIB_DIR/$lib" 2>&1 | grep -v "ERROR: Strip call failed" || true
+  else
+    echo "Warning: $lib not found in $QT_LIB_DIR"
   fi
 done
 
 # Deploy Qt plugins using the qt plugin (this will handle platform plugins, etc.)
 # The plugin might fail but that's okay if libraries are already deployed
-linuxdeploy-plugin-qt --appdir AppDir 2>&1 | grep -v "ERROR: Could not find Qt modules" || echo "Note: Qt libraries deployed manually, plugin may have failed"
+linuxdeploy-plugin-qt --appdir AppDir 2>&1 | grep -v "ERROR: Could not find Qt modules" || true
+
+# Always manually deploy Qt platform plugins to ensure they're present
+# This is critical for GUI applications - without platform plugins, Qt apps won't start
+echo "Deploying Qt platform plugins..."
+PLATFORM_PLUGIN_DIR=""
+if [ -d "/usr/lib64/qt5/plugins/platforms" ]; then
+  PLATFORM_PLUGIN_DIR="/usr/lib64/qt5/plugins/platforms"
+elif [ -d "/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms" ]; then
+  PLATFORM_PLUGIN_DIR="/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms"
+fi
+
+if [ -n "$PLATFORM_PLUGIN_DIR" ] && [ -d "$PLATFORM_PLUGIN_DIR" ]; then
+  mkdir -p ./AppDir/usr/plugins/platforms
+  # First, deploy libqxcb.so using linuxdeploy to pull in all its dependencies
+  if [ -f "$PLATFORM_PLUGIN_DIR/libqxcb.so" ]; then
+    echo "Deploying libqxcb.so and its dependencies..."
+    linuxdeploy --appdir AppDir --library "$PLATFORM_PLUGIN_DIR/libqxcb.so" 2>&1 | grep -v "ERROR: Strip call failed" || true
+    # Move it to the correct location (linuxdeploy puts it in usr/lib, we need it in usr/plugins/platforms)
+    if [ -f "./AppDir/usr/lib/libqxcb.so" ]; then
+      mkdir -p ./AppDir/usr/plugins/platforms
+      mv ./AppDir/usr/lib/libqxcb.so ./AppDir/usr/plugins/platforms/ 2>/dev/null || cp ./AppDir/usr/lib/libqxcb.so ./AppDir/usr/plugins/platforms/ 2>/dev/null || true
+    fi
+  fi
+  # Copy all other platform plugins
+  cp "$PLATFORM_PLUGIN_DIR"/libq*.so ./AppDir/usr/plugins/platforms/ 2>/dev/null || true
+  if [ -f "./AppDir/usr/plugins/platforms/libqxcb.so" ]; then
+    echo "Successfully deployed Qt platform plugins from $PLATFORM_PLUGIN_DIR (including libqxcb.so for X11)"
+    echo "Qt platform plugins deployed to: ./AppDir/usr/plugins/platforms/"
+    ls -la ./AppDir/usr/plugins/platforms/ | head -10 || echo "Warning: Could not list platform plugins"
+  else
+    echo "Error: libqxcb.so deployment failed!"
+    echo "Attempted to copy from: $PLATFORM_PLUGIN_DIR"
+    ls -la "$PLATFORM_PLUGIN_DIR" || true
+    exit 1
+  fi
+else
+  echo "Error: Qt platform plugins directory not found"
+  exit 1
+fi
+
+# Ensure Qt can find the plugins by updating the hook script
+# CRITICAL: The AppRun script sets $this_dir but NOT $APPDIR
+# The hook needs to export APPDIR so QT_PLUGIN_PATH works correctly
+mkdir -p ./AppDir/apprun-hooks
+
+echo "Creating/updating Qt plugin path hook..."
+# Always recreate the hook to ensure it's correct
+cat > ./AppDir/apprun-hooks/linuxdeploy-plugin-qt-hook.sh << 'HOOKEOF'
+#!/bin/bash
+# Qt plugin hook for AppImage
+# This must define APPDIR since AppRun only sets $this_dir
+
+# Set APPDIR from the script location (AppRun sources this from $this_dir)
+export APPDIR="${APPDIR:-"$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.."}"
+
+# Set Qt plugin path so Qt can find platform plugins
+export QT_PLUGIN_PATH="${APPDIR}/usr/plugins:${QT_PLUGIN_PATH}"
+
+# Also set LD_LIBRARY_PATH to find Qt libraries
+export LD_LIBRARY_PATH="${APPDIR}/usr/lib:${LD_LIBRARY_PATH}"
+
+# Try to make Qt apps more "native looking" on Gtk-based desktops
+case "${XDG_CURRENT_DESKTOP}" in
+    *GNOME*|*gnome*|*XFCE*)
+        export QT_QPA_PLATFORMTHEME=gtk2
+        ;;
+esac
+HOOKEOF
+chmod +x ./AppDir/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+echo "Created Qt plugin path hook with APPDIR definition"
+
+# Bundle libstdc++ for compatibility across different distributions
+# IMPORTANT: Use the system libstdc++ (compatible with glibc 2.17), not devtoolset's
+# On CentOS 7, devtoolset-7's libstdc++ requires glibc 2.18, but system libstdc++ only needs 2.17
+# Find system libstdc++ location (prioritize system paths, avoid devtoolset paths)
+if [ -f "/usr/lib64/libstdc++.so.6" ] && ! readlink -f /usr/lib64/libstdc++.so.6 | grep -q devtoolset; then
+    # CentOS 7 system libstdc++ (glibc 2.17 compatible)
+    STDCPP_LIB="/usr/lib64/libstdc++.so.6"
+elif [ -f "/usr/lib/x86_64-linux-gnu/libstdc++.so.6" ] && ! readlink -f /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep -q devtoolset; then
+    # Ubuntu/Debian system libstdc++
+    STDCPP_LIB="/usr/lib/x86_64-linux-gnu/libstdc++.so.6"
+elif [ -f "/usr/lib/libstdc++.so.6" ] && ! readlink -f /usr/lib/libstdc++.so.6 | grep -q devtoolset; then
+    # Generic system libstdc++
+    STDCPP_LIB="/usr/lib/libstdc++.so.6"
+fi
+
+if [ -n "$STDCPP_LIB" ] && [ -f "$STDCPP_LIB" ]; then
+    echo "Bundling system libstdc++ for compatibility (glibc 2.17+)..."
+    cp "$STDCPP_LIB" ./AppDir/usr/lib/ 2>/dev/null || true
+    # Also try to find and bundle system libgcc_s (avoid devtoolset)
+    if [ -f "/usr/lib64/libgcc_s.so.1" ] && ! readlink -f /usr/lib64/libgcc_s.so.1 2>/dev/null | grep -q devtoolset; then
+        cp /usr/lib64/libgcc_s.so.1 ./AppDir/usr/lib/ 2>/dev/null || true
+    elif [ -f "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1" ] && ! readlink -f /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 2>/dev/null | grep -q devtoolset; then
+        cp /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 ./AppDir/usr/lib/ 2>/dev/null || true
+    fi
+else
+    echo "Warning: Could not find system libstdc++ (avoiding devtoolset version)"
+    echo "AppImage may have compatibility issues on older systems"
+fi
 
 if [ $(arch) != "armv7l" ]
 then
@@ -205,20 +352,29 @@ linuxdeploy-plugin-appimage --appdir=AppDir
 
 # raspberry pi build
 if [ $(arch) = "armv7l" ]; then
-  rename 's/armhf/raspberrypi-armhf/' Rclone_Browser*
-  rename 's/Rclone_Browser/rclone-browser/' Rclone_Browser*
+  for file in Rclone_Browser*; do
+    [ -f "$file" ] || continue
+    newname=$(echo "$file" | sed 's/armhf/raspberrypi-armhf/; s/Rclone_Browser/rclone-browser/')
+    [ "$file" != "$newname" ] && mv "$file" "$newname"
+  done
 fi
 
 # x86 build
 if [ $(arch) = "i686" ]; then
-  rename 's/i386/linux-i386/' Rclone_Browser*
-  rename 's/Rclone_Browser/rclone-browser/' Rclone_Browser*
+  for file in Rclone_Browser*; do
+    [ -f "$file" ] || continue
+    newname=$(echo "$file" | sed 's/i386/linux-i386/; s/Rclone_Browser/rclone-browser/')
+    [ "$file" != "$newname" ] && mv "$file" "$newname"
+  done
 fi
 
 # x86_64 build
 if [ $(arch) = "x86_64" ]; then
-  rename x86_64 linux-x86_64 Rclone_Browser*
-  rename Rclone_Browser rclone-browser Rclone_Browser*
+  for file in Rclone_Browser*; do
+    [ -f "$file" ] || continue
+    newname=$(echo "$file" | sed 's/x86_64/linux-x86_64/; s/Rclone_Browser/rclone-browser/')
+    [ "$file" != "$newname" ] && mv "$file" "$newname"
+  done
 fi
 
 cp ./*AppImage "$ROOT"/release/
