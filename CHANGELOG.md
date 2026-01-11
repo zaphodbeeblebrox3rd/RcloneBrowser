@@ -125,15 +125,15 @@
 -   Mount and unmount folders on macOS and GNU/Linux
 -   Optionally minimizes to tray, with notifications when upload/download finishes
 
-[1.8.0]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.8.0
-[1.7.0]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.7.0
-[1.6.0]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.6.0
-[1.5.3]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.5.3
-[1.5.2]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.5.2
-[1.5.1]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.5.1
-[1.5]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.5
-[1.4.1]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.4.1
-[1.4]: https://github.com/kapitainsky/RcloneBrowser/releases/tag/1.4
+[1.8.0]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.8.0
+[1.7.0]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.7.0
+[1.6.0]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.6.0
+[1.5.3]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.5.3
+[1.5.2]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.5.2
+[1.5.1]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.5.1
+[1.5]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.5
+[1.4.1]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.4.1
+[1.4]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/tag/1.4
 [1.2]: https://github.com/mmozeiko/RcloneBrowser/releases/tag/1.2
 [1.1]: https://github.com/mmozeiko/RcloneBrowser/releases/tag/1.1
 [1.0.0]: https://github.com/mmozeiko/RcloneBrowser/releases/tag/1.0.0

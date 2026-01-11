@@ -1,6 +1,6 @@
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/RcloneBrowserLongLogo1.png" width="80%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/RcloneBrowserLongLogo1.png" width="80%" />
 
-[![Travis CI Build Status][img1]][1] [![AppVeyor Build Status][img2]][2] [![Downloads][img3]][3] [![Release][img4]][4] <img src="https://img.shields.io/badge/Qt-cmake-green.svg"> [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e22f828fc0c94dcf9ddb3d38701d177f)](https://www.codacy.com/manual/kapitainsky/RcloneBrowser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kapitainsky/RcloneBrowser&amp;utm_campaign=Badge_Grade) [![License][img5]][5] [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/kapitainsky)
+[![Travis CI Build Status][img1]][1] [![AppVeyor Build Status][img2]][2] [![Downloads][img3]][3] [![Release][img4]][4] <img src="https://img.shields.io/badge/Qt-cmake-green.svg"> [![License][img5]][5]
 
 Rclone browser
 ==============
@@ -10,20 +10,19 @@ Supports macOS, GNU/Linux, BSD family and Windows.
 
 Table of contents
 -------------------
-*   [Features](https://github.com/kapitainsky/RcloneBrowser#features)
-*   [Sample screenshots](https://github.com/kapitainsky/RcloneBrowser#sample-screenshots)
-*   [How to get it](https://github.com/kapitainsky/RcloneBrowser#how-to-get-it)
-*   [Why AppImage only for Linux](https://github.com/kapitainsky/RcloneBrowser#why-appimage-only-for-linux)
-*   [Build instructions](https://github.com/kapitainsky/RcloneBrowser#build-instructions)
-    *   [Linux](https://github.com/kapitainsky/RcloneBrowser#linux)
-    *   [FreeBSD](https://github.com/kapitainsky/RcloneBrowser#freebsd)
-    *   [OpenBSD](https://github.com/kapitainsky/RcloneBrowser#openbsd)
-    *   [NetBSD](https://github.com/kapitainsky/RcloneBrowser#netbsd)
-    *   [macOS](https://github.com/kapitainsky/RcloneBrowser#macos)
-    *   [Windows](https://github.com/kapitainsky/RcloneBrowser#windows)
-*   [Portable vs standard mode](https://github.com/kapitainsky/RcloneBrowser#portable-vs-standard-mode)
-*   [History](https://github.com/kapitainsky/RcloneBrowser#history)
-*   [Code signing certificates donations](https://github.com/kapitainsky/RcloneBrowser#code-signing-certificates-donations)
+*   [Features](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#features)
+*   [Sample screenshots](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#sample-screenshots)
+*   [How to get it](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#how-to-get-it)
+*   [Why AppImage only for Linux](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#why-appimage-only-for-linux)
+*   [Build instructions](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#build-instructions)
+    *   [Linux](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#linux)
+    *   [FreeBSD](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#freebsd)
+    *   [OpenBSD](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#openbsd)
+    *   [NetBSD](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#netbsd)
+    *   [macOS](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#macos)
+    *   [Windows](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#windows)
+*   [Portable vs standard mode](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#portable-vs-standard-mode)
+*   [History](https://github.com/zaphodbeeblebrox3rd/RcloneBrowser#history)
 
 Features
 --------
@@ -51,27 +50,27 @@ Sample screenshots
 -------------------
 **macOS**
 <p align="center">
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot24.png" width="100%" />
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot23.png" width="75%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot24.png" width="100%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot23.png" width="75%" />
 </p>
 
 **Linux**
 <p align="center">
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot21.png" width="65%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot21.png" width="65%" />
 </p>
 &nbsp;
 <p align="center">
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot22.png" width="65%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot22.png" width="65%" />
 </p>
 
 &nbsp;
 **Windows**
 <p align="center">
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot25.PNG" width="100%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot25.PNG" width="100%" />
 </p>
 &nbsp;
 <p align="center">
-<img src="https://github.com/kapitainsky/RcloneBrowser/wiki/images/screenshot26.PNG" width="65%" />
+<img src="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/screenshot26.PNG" width="65%" />
 </p>
 
 &nbsp;
@@ -101,8 +100,6 @@ To make life easier when using AppImages on Linux, you can use [AppImageLauncher
 
 *   **Easy removal of AppImages from system** - Removing integrated AppImages is pretty simple, too. Similar to updating AppImages, you will find an entry in the context menu in the application launcher that triggers a removal tool. You will be asked to confirm the removal. If you choose to do so, the desktop integration is undone, and the file is removed from your system.
 
-For all released binaries file with hashes signed with my [PGP key](https://github.com/kapitainsky/RcloneBrowser/wiki/PGP-key) is provided. It allows to verify that provided binaries were created by myself (authenticity) and are unchanged (integrity). If you would like to have properly signed releases with code signing certificates please see note at the end of this section.
-
 More and more operating systems include Rclone Browser in their offical distribution channels. You can check availibility [here](https://repology.org/project/rclone-browser/packages).
 
 ArchLinux users can install latest release from AUR repository: [rclone-browser][7].
@@ -112,8 +109,6 @@ Fedora package is now available from [Fedora packages](https://apps.fedoraprojec
 FreeBSD has its version available from [freshports](https://www.freshports.org/net/rclone-browser) website.
 
 And if you would like to run it directly on your NAS (e.g. Synology or QNAP) there is docker version provided by @romancin - https://github.com/romancin/rclonebrowser-docker
-
-*Note: For Windows and macOS it would be much nicer (to avoid pop ups about unknown software origin) to properly sign released packages with code signing certificates however it does not come free even for open source software. I looked at it and it seems that to get keys for both systems for the next three years would cost about $500 (3x$99 for [Apple developer account](https://developer.apple.com/support/purchase-activation/) and $200 for cheapest Comodo [code signing certificate](https://comodosslstore.com/uk/code-signing). I am not prepared to budget it as I do this only as a hobby and I am entirely happy with this software as it is. If Rclone Browser users think that properly signed software would be beneficial for them they can [chip in](https://www.paypal.me/kapitainsky) some cash for it. If I raise required amount I will get keys. If not I will give money to some charity.*
 
 ### Compatibility Table for AppImage with x86_64
 
@@ -169,13 +164,14 @@ Build instructions
 
 
 ### Linux
+> Compiling, rather than using the AppImage will yield you a build with modern OpenSSL implementations.  The AppImage is built with OpenSSL 1.1.  It might or might not be a real-life security concern in this context in the way it is used.  
 1.  Install dependencies for your particular distribution:
     *   **Debian/Ubuntu and derivatives**: `sudo apt update && sudo apt -y install git g++ cmake make qtdeclarative5-dev` 
     *   **Suse/OpenSuse**: `sudo zypper ref && sudo zypper --non-interactive install git cmake make gcc-c++ libQt5Core-devel libQt5Widgets-devel libQt5Network-devel`
     *   **RHEL**: `sudo yum -y install git gcc-c++ cmake make qt5-qtdeclarative`
     *   **Fedora**: `sudo dnf -y install git g++ cmake make qt5-qtdeclarative-devel`
     *   **Arch/Manjaro**: `sudo pacman -Sy --noconfirm --needed git gcc cmake make qt5-declarative`
-2.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`
+2.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 3.  Go to source folder `cd RcloneBrowser`
 4.  Create new build folder - `mkdir build && cd build`
 5.  Run `cmake ..` from build folder to create makefile
@@ -186,7 +182,7 @@ Build instructions
 
 ### FreeBSD
 1.  Install dependencies `sudo pkg install git cmake qt5-buildtools qt5-declarative qt5-qmake`
-2.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`
+2.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 3.  Go to source folder `cd RcloneBrowser`
 4.  Create new build folder - `mkdir build && cd build`
 5.  Run `cmake ..` from build folder to create makefile
@@ -197,7 +193,7 @@ Build instructions
 
 ### OpenBSD
 1.  Install dependencies `sudo pkg_add git cmake qt5`
-2.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`
+2.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 3.  Go to source folder `cd RcloneBrowser`
 4.  Create new build folder - `mkdir build && cd build`
 5.  Run `cmake .. -DCMAKE_PREFIX_PATH:PATH=/usr/local/lib/qt5/cmake` from build folder to create makefile
@@ -208,7 +204,7 @@ Build instructions
 
 ### NetBSD
 1.  Install dependencies `sudo pkgin install git cmake qt5-qtdeclarative`
-2.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`
+2.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 3.  Go to source folder `cd RcloneBrowser`
 4.  Create new build folder - `mkdir build && cd build`
 5.  Run `cmake .. -DCMAKE_PREFIX_PATH:PATH=/usr/pkg/qt5` from build folder to create makefile
@@ -221,7 +217,7 @@ Build instructions
 1.  If you don't have [Homebrew](https://brew.sh/) yet install it `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 2.  You might be asked to install xcode command line tools - do it. This is actuall macOS SDK, headers, and build tools. You don't need full xcode IDE.
 3.  Install dependencies `brew install git cmake rclone qt5`
-4.  Clone source code from this repo `git clone https://github.com/kapitainsky/RcloneBrowser.git`
+4.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 5.  Go to source folder `cd RcloneBrowser`
 6.  Create new build folder - `mkdir build && cd build`
 7.  Run `cmake .. -DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/qt` from build folder to create makefile
@@ -275,26 +271,20 @@ I used DinCahill's [fork](https://github.com/DinCahill/RcloneBrowser) as a base 
 
 I fixed whatever I found not working and added various tweaks enhancing functionality. I recompiled and repackaged everything using latest Qt (5.13.1) and latest platforms' compilers. This on its own fixed some issues and added new features like support for dark mode in macOS. Then followed with more fixes and more features. Rclone Browser was great again:) and is getting better.
 
-Code signing certificates donations 
----------------------------
 
-If you would like to donate towards code signing keys please feel free to [do it](https://www.paypal.me/kapitainsky). If I don't raise required $500 I will give all money to some charity. Please see my note regarding it at the end of [How to get it](https://github.com/kapitainsky/RcloneBrowser#how-to-get-it) section. I will keep all updated with amount raised.
-
-Raised so far: 6.4 USD (1.3% of the required target)
-
-[1]: https://travis-ci.org/kapitainsky/RcloneBrowser
-[2]: https://ci.appveyor.com/project/kapitainsky/RcloneBrowser
-[3]: https://github.com/kapitainsky/RcloneBrowser/releases
-[4]: https://github.com/kapitainsky/RcloneBrowser/releases/latest
-[5]: https://github.com/kapitainsky/RcloneBrowser/blob/master/LICENSE
+[1]: https://travis-ci.org/zaphodbeeblebrox3rd/RcloneBrowser
+[2]: https://ci.appveyor.com/project/zaphodbeeblebrox3rd/RcloneBrowser
+[3]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases
+[4]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/latest
+[5]: https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/blob/master/LICENSE
 [6]: https://www.videolan.org
 [7]: https://aur.archlinux.org/packages/rclone-browser
 [8]: https://docs.microsoft.com/en-us/visualstudio/releases/2019/release-notes
 [9]: http://www.cmake.org/
 [10]: https://www.qt.io/download-open-source/
-[img1]: https://api.travis-ci.org/kapitainsky/RcloneBrowser.svg?branch=master
+[img1]: https://api.travis-ci.org/zaphodbeeblebrox3rd/RcloneBrowser.svg?branch=master
 [img2]: https://ci.appveyor.com/api/projects/status/cclx7jc48t4u4x9u?svg=true
-[img3]: https://img.shields.io/github/downloads/kapitainsky/RcloneBrowser/total.svg?maxAge=3600
-[img4]: https://img.shields.io/github/release/kapitainsky/RcloneBrowser.svg?maxAge=3600
-[img5]: https://img.shields.io/github/license/kapitainsky/RcloneBrowser.svg?maxAge=3600
+[img3]: https://img.shields.io/github/downloads/zaphodbeeblebrox3rd/RcloneBrowser/total.svg?maxAge=3600
+[img4]: https://img.shields.io/github/release/zaphodbeeblebrox3rd/RcloneBrowser.svg?maxAge=3600
+[img5]: https://img.shields.io/github/license/zaphodbeeblebrox3rd/RcloneBrowser.svg?maxAge=3600
 [billziss-gh_cgofuse_i18]: https://github.com/billziss-gh/cgofuse/issues/18

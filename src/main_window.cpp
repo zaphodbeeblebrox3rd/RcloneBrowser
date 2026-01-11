@@ -210,9 +210,7 @@ MainWindow::MainWindow() {
             R"(<h3>GUI for rclone, v)" RCLONE_BROWSER_VERSION "</h3>"
             R"(<p>Copyright &copy; 2019</p>)"
 
-            R"(<p>Current development and maintenance<br /><a href="https://github.com/kapitainsky/RcloneBrowser">kapitainsky</a></p>)"
-
-            R"(<p>New features and fixes<br /><a href="https://github.com/kapitainsky/RcloneBrowser/graphs/contributors">contributors</a></p>)"
+            R"(<p>New features and fixes<br /><a href="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/graphs/contributors">contributors</a></p>)"
 
             R"(<p>Original version<br /><a href="https://mmozeiko.github.io/RcloneBrowser">Martins Mozeiko</a></p>)"));
   });
@@ -590,8 +588,8 @@ void MainWindow::rcloneGetVersion() {
                                current_date);
 
             // get latest version available
-            QString url = "https://api.github.com/repos/kapitainsky/"
-                          "rclonebrowser/releases/latest";
+            QString url = "https://api.github.com/repos/zaphodbeeblebrox3rd/"
+                          "RcloneBrowser/releases/latest";
             QNetworkAccessManager manager;
             QNetworkReply *response = manager.get(QNetworkRequest(QUrl(url)));
             QEventLoop event;
@@ -625,7 +623,7 @@ void MainWindow::rcloneGetVersion() {
                           R"(New version: v)" +
                           rclone_browser_latest_version_no +
                           "</p>"
-                          R"(<p>Visit <a href="https://github.com/kapitainsky/RcloneBrowser/releases/latest">releases</a> page to download</p>)"));
+                          R"(<p>Visit <a href="https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/releases/latest">releases</a> page to download</p>)"));
                 };
               };
             };

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2019 Dariusz Bogdanski <dariuszb@me.com> -->
 <component type="desktop-application">
-  <id>org.kapitainsky.rclone_browser</id>
+  <id>org.rclone-browser.rclone_browser</id>
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
   <name>Rclone Browser</name>
@@ -30,16 +30,16 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/kapitainsky/RcloneBrowser/wiki/images/IMGdefault.png</image>
+      <image>https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/IMGdefault.png</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/kapitainsky/RcloneBrowser/wiki/images/IMGtransfer.png</image>
+      <image>https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki/images/IMGtransfer.png</image>
     </screenshot>
   </screenshots>
-  <url type="homepage">https://github.com/kapitainsky/RcloneBrowser/</url>
-  <url type="bugtracker">https://github.com/kapitainsky/RcloneBrowser/issues/</url>
-  <url type="faq">https://github.com/kapitainsky/RcloneBrowser/wiki</url>
-  <url type="help">https://github.com/kapitainsky/RcloneBrowser/issues/</url>
+  <url type="homepage">https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/</url>
+  <url type="bugtracker">https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/issues/</url>
+  <url type="faq">https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/wiki</url>
+  <url type="help">https://github.com/zaphodbeeblebrox3rd/RcloneBrowser/issues/</url>
   <releases>
     <release version="1.6.0" date="2019-10-30" />
   </releases>
