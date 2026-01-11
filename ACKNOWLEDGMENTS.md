@@ -1,6 +1,8 @@
 # Acknowledgments
 
-This project uses the following external tools and libraries during development and packaging. We acknowledge and thank their creators and maintainers:
+This project is a front end for [rclone](https://rclone.org/), which has had a profound effect on educational and research communities by allowing financially constrained students and researchers to utilize cloud storage while working across multiple computational servers and institutions. We are grateful to the rclone developers and community for creating such a powerful and accessible tool that enables this work.
+
+This project also uses the following external tools and libraries during development and packaging. We acknowledge and thank their creators and maintainers:
 
 ## Build and Packaging Tools
 

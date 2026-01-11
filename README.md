@@ -276,6 +276,13 @@ Acknowledgments
 
 This project uses various external tools and libraries during development and packaging. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for a complete list and recognition of their creators and maintainers.
 
+Special Thanks
+--------------
+
+Special recognition goes to **kapitainsky** for his major contributions to this project over the years. His significant work in maintaining, fixing, and enhancing Rclone Browser has been invaluable to the community.
+
+If you'd like to support kapitainsky's efforts to obtain code-signing certificates for Windows and macOS releases (which would eliminate security warnings and improve user experience), you can contribute via [PayPal](https://www.paypal.me/kapitainsky).
+
 
 [1]: https://travis-ci.org/zaphodbeeblebrox3rd/RcloneBrowser
 [2]: https://ci.appveyor.com/project/zaphodbeeblebrox3rd/RcloneBrowser
