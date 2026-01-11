@@ -87,11 +87,11 @@ Mac version is compiled to run on all versions of macOS starting with 10.9.
 Situation with Linux is a bit fuzzier...
 Linux binary ([AppImage](https://appimage.org/)) for armhf architecture runs on any Raspberry Pi hardware using Raspbian based on Stretch or Buster.
 
-Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on CentOS 7 (glibc 2.17) and i386 on Ubuntu 16.04 LTS (released in 2016, glibc 2.23). Building on CentOS 7 ensures the AppImage is compatible with systems running glibc 2.17 and newer (CentOS 7+, Ubuntu 16.04+, Debian Stretch+, etc.).
+Linux binaries (AppImage) for x86_64 and i386 architectures should run on systems using distributions released in the last few years. x86_64 one is built on CentOS 7 (glibc 2.17) and i386 on Ubuntu 16.04 LTS (released in 2016, glibc 2.23). Building on CentOS 7 ensures the AppImage is compatible with systems running glibc 2.17 and newer (CentOS 7+, RHEL 7+, Ubuntu 16.04+, Debian Stretch+, etc.).
 
 The whole idea with AppImage is to build it on the oldest still supported LTS distro – and it should work on all newer OS releases. AppImage contains an aplication and all the files the app needs to run. In other words, each AppImage has no dependencies other than what is included in the base operating system.
 
-In practical terms it means that for example for Ubuntu Rclone Browser AppImage works on all versions starting with 16.04 LTS (glibc 2.23+) and for Debian starting with Stretch (glibc 2.24+). The AppImage also works on CentOS 7+ (glibc 2.17+). With other distributions YMMV but I test major ones like Suse or Fedora. This is Linux. 10000 different distributions… with changes and customizations often only their authors are aware of. I would be happy to hear what distribution it does not work for.
+In practical terms it means that for example for Ubuntu Rclone Browser AppImage works on all versions starting with 16.04 LTS (glibc 2.23+) and for Debian starting with Stretch (glibc 2.24+). The AppImage also works on CentOS 7+ and RHEL 7+ (glibc 2.17+). With other distributions YMMV but I test major ones like Suse or Fedora. This is Linux. 10000 different distributions… with changes and customizations often only their authors are aware of. I would be happy to hear what distribution it does not work for.
 
 To make life easier when using AppImages on Linux, you can use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) which monitors your system for downloaded AppImages and provides several useful benefits including:
 
@@ -114,6 +114,21 @@ FreeBSD has its version available from [freshports](https://www.freshports.org/n
 And if you would like to run it directly on your NAS (e.g. Synology or QNAP) there is docker version provided by @romancin - https://github.com/romancin/rclonebrowser-docker
 
 *Note: For Windows and macOS it would be much nicer (to avoid pop ups about unknown software origin) to properly sign released packages with code signing certificates however it does not come free even for open source software. I looked at it and it seems that to get keys for both systems for the next three years would cost about $500 (3x$99 for [Apple developer account](https://developer.apple.com/support/purchase-activation/) and $200 for cheapest Comodo [code signing certificate](https://comodosslstore.com/uk/code-signing). I am not prepared to budget it as I do this only as a hobby and I am entirely happy with this software as it is. If Rclone Browser users think that properly signed software would be beneficial for them they can [chip in](https://www.paypal.me/kapitainsky) some cash for it. If I raise required amount I will get keys. If not I will give money to some charity.*
+
+### Compatibility Table for AppImage with x86_64
+
+| Distribution | Unsupported Versions | Supported Versions |
+|--------------|---------------------|-------------------|
+| **Debian/Ubuntu** | Ubuntu 14.04 and earlier, Debian 8 (Jessie) and earlier | Ubuntu 16.04+, Debian 9 (Stretch)+ |
+| **Suse/OpenSuse** | OpenSUSE 13.2 and earlier | OpenSUSE Leap 42.1+, Tumbleweed |
+| **RHEL/CentOS** | RHEL 6 and earlier, CentOS 6 and earlier | RHEL 7+, CentOS 7+ |
+| **Fedora** | Fedora 21 and earlier | Fedora 22+ |
+| **Arch/Manjaro** | N/A (rolling release) | All current versions |
+| **FreeBSD** | FreeBSD 10 and earlier | FreeBSD 11+ |
+| **OpenBSD** | OpenBSD 5.8 and earlier | OpenBSD 6.0+ |
+| **NetBSD** | NetBSD 7 and earlier | NetBSD 8+ |
+| **macOS** | macOS 10.8 and earlier | macOS 10.9+ |
+| **Windows** | Windows 7 and earlier (without Visual Studio 2015+) | Windows 8+ with Visual Studio 2015+ or Windows 10+ |
 
 Why AppImage only for Linux
 ----------------------------
@@ -148,22 +163,10 @@ Build instructions
 
 **System Requirements:** This project requires C++14 support (GCC 5.1+ or equivalent) and Qt5. The source code can be built on Ubuntu 18.04 LTS through 25.10 and equivalent distributions. The following table shows supported and unsupported major versions for each distribution:
 
-**Note for AppImage Builds:** While the source code builds on Ubuntu 18.04-25.10, AppImages should be built on **CentOS 7** (glibc 2.17) to ensure compatibility with systems running glibc 2.17 and newer. Building AppImages on newer systems will limit compatibility to systems with matching or newer glibc versions.
+**Note for AppImage Builds:** While the source code builds on Ubuntu 18.04-25.10, AppImages should be built on **CentOS 7** (glibc 2.17) to ensure compatibility with systems running glibc 2.17 and newer (CentOS 7+, RHEL 7+, Ubuntu 16.04+, etc.). Building AppImages on newer systems will limit compatibility to systems with matching or newer glibc versions.
 
-**Building AppImages on Newer Systems:** If you're building on Ubuntu 18.04+ but want to maintain compatibility with CentOS 7+ and Ubuntu 16.04+, you can use Docker to build in a CentOS 7 environment. See the [Developer Guide](DEVELOPER_README.md#building-appimage-with-docker) for instructions.
+**Building AppImages on Newer Systems:** If you're building on Ubuntu 18.04+ but want to maintain compatibility with CentOS 7+, RHEL 7+, and Ubuntu 16.04+, you can use Docker to build in a CentOS 7 environment. See the [Developer Guide](DEVELOPER_README.md#building-appimage-with-docker) for instructions.
 
-| Distribution | Unsupported Versions | Supported Versions |
-|--------------|---------------------|-------------------|
-| **Debian/Ubuntu** | Ubuntu 14.04 and earlier, Debian 8 (Jessie) and earlier | Ubuntu 16.04+, Debian 9 (Stretch)+ |
-| **Suse/OpenSuse** | OpenSUSE 13.2 and earlier | OpenSUSE Leap 42.1+, Tumbleweed |
-| **RHEL** | RHEL 7 and earlier | RHEL 8+ |
-| **Fedora** | Fedora 21 and earlier | Fedora 22+ |
-| **Arch/Manjaro** | N/A (rolling release) | All current versions |
-| **FreeBSD** | FreeBSD 10 and earlier | FreeBSD 11+ |
-| **OpenBSD** | OpenBSD 5.8 and earlier | OpenBSD 6.0+ |
-| **NetBSD** | NetBSD 7 and earlier | NetBSD 8+ |
-| **macOS** | macOS 10.8 and earlier | macOS 10.9+ |
-| **Windows** | Windows 7 and earlier (without Visual Studio 2015+) | Windows 8+ with Visual Studio 2015+ or Windows 10+ |
 
 ### Linux
 1.  Install dependencies for your particular distribution:

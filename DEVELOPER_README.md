@@ -19,6 +19,7 @@ This method allows you to build on modern systems (Ubuntu 20.04+, etc.) while en
 
 The AppImage built using this Docker method is compatible with:
 - CentOS 7+ (glibc 2.17+)
+- RHEL 7+ (glibc 2.17+)
 - Ubuntu 16.04+ (glibc 2.23+)
 - Debian Stretch+ (glibc 2.24+)
 - Most modern Linux distributions released after 2014
