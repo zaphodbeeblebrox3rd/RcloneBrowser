@@ -68,6 +68,9 @@ MountWidget::MountWidget(QProcess *process, const QString &remote,
                        ui.showDetails->setStyleSheet(
                            "QToolButton { border: 0; color: red; }");
                        ui.showDetails->setText("Error");
+                       // Auto-expand details and show output on error
+                       ui.showDetails->setChecked(true);
+                       ui.showOutput->setChecked(true);
                      }
                      ui.cancel->setToolTip("Close");
                      emit finished();

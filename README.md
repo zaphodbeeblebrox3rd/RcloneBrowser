@@ -216,14 +216,21 @@ Build instructions
 ### macOS
 1.  If you don't have [Homebrew](https://brew.sh/) yet install it `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 2.  You might be asked to install xcode command line tools - do it. This is actuall macOS SDK, headers, and build tools. You don't need full xcode IDE.
-3.  Install dependencies `brew install git cmake rclone qt5`
+3.  Install dependencies `brew install git cmake qt5`
 4.  Clone source code from this repo `git clone https://github.com/zaphodbeeblebrox3rd/RcloneBrowser.git`
 5.  Go to source folder `cd RcloneBrowser`
 6.  Create new build folder - `mkdir build && cd build`
 7.  Run `cmake .. -DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/qt` from build folder to create makefile
 8.  Run `make` from build folder to create binary
 9.  Go to yet another newly created build folder `cd build`. Your binary should be here
-10. Package your binary with Qt libraries to create self contained application `/usr/local/opt/qt/bin/macdeployqt rclone-browser.app -executable="rclone-browser.app/Contents/MacOS/rclone-browser" -qmldir=../src/`. Without this step binary won't work without Qt installed
+10. `cp -r rclone-browser.app /Applications/`
+
+> MacOS Optional - for mounting of remotes.  
+> - Install macFuse `brew install --cask macfuse`.  
+> - Make sure that rclone is **not** be Brew-installed (brew uninstall if necessary).
+> - Install rclone from the rclone website or this command: `sudo -v ; curl https://rclone.org/install.sh | sudo bash`
+> - Attempt to mount a remote, see there will be an error.  
+> - Attempt to enable the system extensions in System Settings -> Privacy and Security.  Follow the prompts to shut down your machine and enable Kernel extensions.
 
 ### Windows
 1.  Get [Visual Studio 2019][8] - you need "Desktop development with C++" module only

@@ -1108,12 +1108,59 @@ void MainWindow::addMount(const QString &remote, const QString &folder) {
 
   args.append(GetRcloneConf());
   if (!opt.isEmpty()) {
-    args.append(opt.split(' '));
+    args.append(opt.split(' ', Qt::SkipEmptyParts));
   }
   args << remote << folder;
 
   UseRclonePassword(mount);
+  
+  // Connect error handler before starting
+  QObject::connect(mount, &QProcess::errorOccurred, this, [=](QProcess::ProcessError error) {
+    if (error == QProcess::FailedToStart) {
+      QMessageBox::critical(
+          this, "Mount Error",
+          QString("Failed to start rclone mount process.\n\n"
+                  "Possible causes:\n"
+                  "- rclone executable not found\n"
+                  "- macFUSE not installed (required on macOS)\n"
+                  "- Insufficient permissions\n\n"
+                  "Error: %1").arg(mount->errorString()));
+      widget->deleteLater();
+      line->deleteLater();
+      if (--mJobCount == 0) {
+        ui.tabs->setTabText(1, "Jobs");
+      } else {
+        ui.tabs->setTabText(1, QString("Jobs (%1)").arg(mJobCount));
+      }
+      if (ui.jobs->count() == 2) {
+        ui.noJobsAvailable->show();
+      }
+    }
+  });
+  
   mount->start(GetRclone(), args, QIODevice::ReadOnly);
+  
+  // Check if process started successfully
+  if (!mount->waitForStarted(3000)) {
+    QMessageBox::critical(
+        this, "Mount Error",
+        QString("Failed to start rclone mount process.\n\n"
+                "Possible causes:\n"
+                "- rclone executable not found\n"
+                "- macFUSE not installed (required on macOS)\n"
+                "- Insufficient permissions\n\n"
+                "Error: %1").arg(mount->errorString()));
+    widget->deleteLater();
+    line->deleteLater();
+    if (--mJobCount == 0) {
+      ui.tabs->setTabText(1, "Jobs");
+    } else {
+      ui.tabs->setTabText(1, QString("Jobs (%1)").arg(mJobCount));
+    }
+    if (ui.jobs->count() == 2) {
+      ui.noJobsAvailable->show();
+    }
+  }
 }
 
 void MainWindow::addStream(const QString &remote, const QString &stream) {
