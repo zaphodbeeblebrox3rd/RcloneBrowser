@@ -13,7 +13,18 @@ else()
 endif()
 
 if (APPLE)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+  # Set minimum deployment target to 10.13 for better compatibility with modern SDKs
+  # This still allows the app to run on older macOS versions, but requires a more
+  # recent SDK for building. Users can still target 10.9+ at runtime if needed.
+  if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
+  endif()
+  
+  # Ensure C++ standard library headers are found from the SDK
+  # The headers are in the SDK, but we need to make sure they're accessible
+  if(EXISTS "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1")
+    include_directories(SYSTEM "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1")
+  endif()
 endif()
 
 project(rclone-browser)
