@@ -26,8 +26,10 @@ MainWindow::MainWindow() {
   QApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
 #endif
 
-#if !defined(Q_OS_MACOS)
+  // Get settings - needed for both conditional dark mode and unconditional usage below
   auto settings = GetSettings();
+
+#if !defined(Q_OS_MACOS)
   bool darkMode = settings->value("Settings/darkMode").toBool();
 
   // enable dark mode for Windows and Linux
@@ -63,7 +65,6 @@ MainWindow::MainWindow() {
 
   if (sysInfo == "10.9" || sysInfo == "10.10" || sysInfo == "10.11" ||
       sysInfo == "10.12" || sysInfo == "10.13") {
-    auto settings = GetSettings();
     bool darkMode = settings->value("Settings/darkMode").toBool();
     if (darkMode) {
       qApp->setStyle(QStyleFactory::create("Fusion"));
@@ -428,7 +429,7 @@ void MainWindow::rcloneGetVersion() {
           };
 #endif
 
-          QStringList lines = version.split("\n", QString::SkipEmptyParts);
+          QStringList lines = version.split("\n", Qt::SkipEmptyParts);
           QString rclone_info2;
           QString rclone_info3;
 
