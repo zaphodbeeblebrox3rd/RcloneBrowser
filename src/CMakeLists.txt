@@ -1,11 +1,8 @@
-cmake_minimum_required(VERSION 2.8)
+# cmake_minimum_required is set in parent CMakeLists.txt
 
-if (NOT ${CMAKE_VERSION} VERSION_LESS "3.0.0")
-	cmake_policy(SET CMP0028 NEW)
-endif()
-if (NOT ${CMAKE_VERSION} VERSION_LESS "2.8.11")
-	cmake_policy(SET CMP0020 NEW)
-endif()
+# Set policies for compatibility
+cmake_policy(SET CMP0028 NEW)
+cmake_policy(SET CMP0020 NEW)
 
 if(WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /wd4100 /wd4189")

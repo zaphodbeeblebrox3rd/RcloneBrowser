@@ -1,6 +1,31 @@
-project(rclone-browser)
+# CMake 3.5 is required for compatibility with modern CMake versions (4.0+)
+# which removed support for projects requiring < 3.5. CMake 3.5 was released
+# in 2016 and should be available on all supported platforms via package
+# managers (Homebrew, etc.) or direct download.
+# Note: This does NOT affect the minimum macOS version the app can run on
+# (controlled by CMAKE_OSX_DEPLOYMENT_TARGET in src/CMakeLists.txt).
 
-cmake_minimum_required(VERSION 2.8)
+# Check CMake version and provide helpful error message if too old
+if(CMAKE_VERSION VERSION_LESS "3.5")
+    message(FATAL_ERROR "\n"
+        "CMake 3.5 or higher is required to build this project.\n"
+        "Your current CMake version is: ${CMAKE_VERSION}\n\n"
+        "To install CMake 3.5+ on your system:\n"
+        "  macOS (Homebrew):     brew install cmake\n"
+        "  macOS (MacPorts):     sudo port install cmake\n"
+        "  Linux (Ubuntu/Debian): sudo apt-get install cmake\n"
+        "  Linux (Fedora/RHEL):   sudo dnf install cmake\n"
+        "  Linux (Arch):          sudo pacman -S cmake\n"
+        "  Windows:               Download from https://cmake.org/download/\n"
+        "  Or build from source:  https://cmake.org/download/\n\n"
+        "After installing, make sure the new CMake is in your PATH.\n"
+        "You can verify with: cmake --version\n"
+    )
+endif()
+
+cmake_minimum_required(VERSION 3.5)
+
+project(rclone-browser)
 
 if(WIN32)
   # link automatically to qtmain.lib on Windows
